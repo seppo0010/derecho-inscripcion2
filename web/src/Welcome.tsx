@@ -7,9 +7,11 @@ function Welcome() {
   const navigate = useNavigate();
   return (
     <Box>
-      Bienvenide. Veamos qué materias nos interesan y horarios disponibles hay
-      para elegir una mejor inscripción.<br />
-      <Button onClick={() => navigate('/materias')}>Empezar</Button>
+      <p>
+        Bienvenide. Veamos qué materias nos interesan y horarios disponibles hay
+        para elegir una mejor inscripción.<br />
+        <Button onClick={() => navigate('/materias')}>Empezar</Button>
+      </p>
     </Box>
   );
 }

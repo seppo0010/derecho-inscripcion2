@@ -44,7 +44,7 @@ function Materias() {
     setChecked(newChecked);
   };
 
-  if (loading) {
+  if (loading || !horarios) {
     return (<>Loading...</>)
   }
   return (<>

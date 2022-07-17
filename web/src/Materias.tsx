@@ -16,7 +16,7 @@ function onlyUnique<T>(value: T, index: number, self: T[]) {
 function Materias() {
   const navigate = useNavigate();
   const { loading, oferta } = useContext(OfertaContext);
-  const [materias, setMaterias] = useState<string[]>([]);
+  const [materias, setMaterias] = useState<null | string[]>(null);
   useEffect(() => {
     setMaterias((oferta || []).map((o) => o.departamento ? `Puntos ${o.departamento}` : o.materia).filter(onlyUnique));
   }, [oferta]);
@@ -35,7 +35,7 @@ function Materias() {
     setChecked(newChecked);
   };
 
-  if (loading) {
+  if (loading || !materias) {
     return (<>Loading...</>)
   }
   return (<>
