@@ -65,6 +65,7 @@ function Materias() {
         );
       })}
     </List>
+    <Button onClick={() => navigate('/')}>Anterior</Button>
     <Button onClick={() => navigate('/horarios')}>Siguiente</Button>
   </>);
 }
