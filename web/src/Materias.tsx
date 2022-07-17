@@ -15,7 +15,7 @@ function onlyUnique<T>(value: T, index: number, self: T[]) {
 
 function Materias() {
   const navigate = useNavigate();
-  const { loading, oferta } = useContext(OfertaContext);
+  const { loading, oferta, setMateriasSelected } = useContext(OfertaContext);
   const [materias, setMaterias] = useState<null | string[]>(null);
   useEffect(() => {
     setMaterias((oferta || []).map((o) => o.departamento ? `Puntos ${o.departamento}` : o.materia).filter(onlyUnique));
@@ -33,6 +33,10 @@ function Materias() {
     }
 
     setChecked(newChecked);
+  };
+
+  const save = () => {
+    setMateriasSelected(checked);
   };
 
   if (loading || !materias) {
@@ -65,8 +69,8 @@ function Materias() {
         );
       })}
     </List>
-    <Button onClick={() => navigate('/')}>Anterior</Button>
-    <Button onClick={() => navigate('/horarios')}>Siguiente</Button>
+    <Button onClick={() => { save(); navigate('/') } }>Anterior</Button>
+    <Button onClick={() => { save(); navigate('/horarios') } }>Siguiente</Button>
   </>);
 }
 

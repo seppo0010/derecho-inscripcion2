@@ -10,6 +10,7 @@ import Oferta from './Oferta';
 import Welcome from './Welcome';
 import Materias from './Materias';
 import Horarios from './Horarios';
+import Resultados from './Resultados';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <Route path="/" element={<Welcome />} />
             <Route path="/materias" element={<Materias />} />
             <Route path="/horarios" element={<Horarios />} />
+            <Route path="/resultados" element={<Resultados />} />
           </Routes>
         </HashRouter>
       </Oferta>

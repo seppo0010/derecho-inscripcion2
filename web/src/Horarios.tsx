@@ -24,7 +24,7 @@ function sortHorario(h1: string, h2: string) {
 
 function Materias() {
   const navigate = useNavigate();
-  const { loading, oferta } = useContext(OfertaContext);
+  const { loading, oferta, setHorariosSelected } = useContext(OfertaContext);
   const [horarios, setHorarios] = useState<string[]>([]);
   useEffect(() => {
     setHorarios((oferta || []).map((o) => o.horario).filter(onlyUnique).sort(sortHorario));
@@ -42,6 +42,10 @@ function Materias() {
     }
 
     setChecked(newChecked);
+  };
+
+  const save = () => {
+    setHorariosSelected(checked);
   };
 
   if (loading || !horarios) {
@@ -74,8 +78,8 @@ function Materias() {
         );
       })}
     </List>
-    <Button onClick={() => navigate('/materias')}>Anterior</Button>
-    <Button onClick={() => navigate('/resultados')}>Siguiente</Button>
+    <Button onClick={() => { save(); navigate('/materias')} }>Anterior</Button>
+    <Button onClick={() => { save(); navigate('/resultados')} }>Siguiente</Button>
   </>);
 }
 
