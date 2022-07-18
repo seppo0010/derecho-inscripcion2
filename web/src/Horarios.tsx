@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { OfertaContext } from './Oferta';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
@@ -8,6 +8,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
 
 function onlyUnique<T>(value: T, index: number, self: T[]) {
   return self.indexOf(value) === index;
@@ -24,16 +25,23 @@ function sortHorario(h1: string, h2: string) {
 
 function Materias() {
   const navigate = useNavigate();
-  const { loading, oferta, setHorariosSelected } = useContext(OfertaContext);
+  const { loading, oferta, setHorariosSelected, horariosSelected } = useContext(OfertaContext);
   const [horarios, setHorarios] = useState<string[]>([]);
   useEffect(() => {
     setHorarios((oferta || []).map((o) => o.horario).filter(onlyUnique).sort(sortHorario));
   }, [oferta]);
-  const [checked, setChecked] = React.useState<string[]>([]);
+  const [checked, setChecked] = React.useState<string[] | null>(null);
+
+  useEffect(() => {
+    if (checked === null) {
+      setChecked(horariosSelected || []);
+    }
+  }, [horariosSelected, checked])
+
 
   const handleToggle = (value: string) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
+    const currentIndex = (checked as string[]).indexOf(value);
+    const newChecked = [...(checked as string[])];
 
     if (currentIndex === -1) {
       newChecked.push(value);
@@ -48,11 +56,19 @@ function Materias() {
     setHorariosSelected(checked);
   };
 
-  if (loading || !horarios) {
+  if (loading || !horarios || checked === null) {
     return (<>Loading...</>)
   }
   return (<>
-    Materias:
+    <Breadcrumbs>
+      <Link to="/">
+        Inscripción
+      </Link>
+      <Link to="/materias">
+        Materias
+      </Link>
+      <span>Horarios</span>
+    </Breadcrumbs>
     <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
       {horarios.map((value: string) => {
         const labelId = `checkbox-list-label-${value}`;
