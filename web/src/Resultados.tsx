@@ -36,6 +36,7 @@ function Resultados() {
       </Link>
       <span>Resultados</span>
     </Breadcrumbs>
+    {ofertaFiltered.length === 0 && 'Sin resultados'}
     {ofertaFiltered.map((item) => (
       <Accordion key={item.comision}>
         <AccordionSummary
