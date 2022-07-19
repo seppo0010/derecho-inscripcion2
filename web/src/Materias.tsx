@@ -19,7 +19,7 @@ function Materias() {
   const { loading, oferta, materiasSelected, setMateriasSelected } = useContext(OfertaContext);
   const [materias, setMaterias] = useState<null | string[]>(null);
   useEffect(() => {
-    setMaterias((oferta || []).map((o) => o.departamento ? `Puntos ${o.departamento}` : o.materia).filter(onlyUnique));
+    setMaterias((oferta || []).map((o) => o.materia).filter(onlyUnique));
   }, [oferta]);
   const [checked, setChecked] = React.useState<null | string[]>(null);
 
