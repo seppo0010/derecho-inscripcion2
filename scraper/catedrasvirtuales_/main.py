@@ -15,7 +15,7 @@ for materia_turno in data:
     img = os.path.join('data/catedrasvirtuales_', filename)
     if not os.path.isfile(img):
         continue
-    text = re.sub(r'\s+', ' ', pytesseract.image_to_string(Image.open(img))).strip()
+    text = re.sub(r'\s+', ' ', pytesseract.image_to_string(Image.open(img), lang='spa')).strip()
     if text == '':
         continue
     for comment in materia_turno['comments']['data']:
