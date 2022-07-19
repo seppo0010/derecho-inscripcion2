@@ -15,11 +15,13 @@ for materia_turno in data:
     img = os.path.join('data/catedrasvirtuales_', filename)
     if not os.path.isfile(img):
         continue
-    text = re.sub(r'\s+', ' ', pytesseract.image_to_string(Image.open(img), lang='spa')).strip()
+    text = pytesseract.image_to_string(Image.open(img), lang='spa')
+    text = re.sub(r'\s+', ' ', text).strip()
     if text == '':
         continue
     for comment in materia_turno['comments']['data']:
         results.append({
+            'shortcode': materia_turno['shortcode'],
             'materia_turno': text,
             'text': comment['text'],
         })
