@@ -14,9 +14,19 @@ def is_same_materia(materia_turno, materia):
     return known_materias[materia_turno].get('materia', None) == materia
 
 def is_same_departamento(materia_turno, departamento):
+    if departamento is None:
+        return False
     if materia_turno not in known_materias:
         raise Exception(f'Unknown materia {materia_turno}')
     return known_materias[materia_turno].get('departamento', None) == departamento
+
+def is_docente_named(docente, tokens):
+    if len(docente) > 2 and docente in tokens:
+        return True
+    docente_tokens = docente.split(' ')
+    if len(docente_tokens) >= 2 and len(docente_tokens[0]) >= 3:
+        return docente_tokens[0] in tokens
+    return False
 
 oferta = read_json('./oferta/data/oferta_cpc.json')
 oferta.extend(read_json('./oferta/data/oferta_cpo.json'))
@@ -31,8 +41,8 @@ for o in oferta:
     for comment in cv_:
         if (
                 is_same_materia(comment['materia_turno'], o['materia']) or
-                is_same_departamento(comment['materia_turno'], o['materia'])
-            ) and len(docente) > 2 and docente in comment['tokens']:
+                is_same_departamento(comment['materia_turno'], o.get('departamento', None))
+            ) and is_docente_named(docente, comment['tokens']):
             o['catedrasvirtuales_'].append(comment['text'])
 
 oferta_by_comision = {}
