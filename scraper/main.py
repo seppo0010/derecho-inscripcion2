@@ -44,6 +44,7 @@ for o in oferta:
                 is_same_departamento(comment['materia_turno'], o.get('departamento', None))
             ) and is_docente_named(docente, comment['tokens']):
             o['catedrasvirtuales_'].append({
+                'sentiment': comment['sentiment'],
                 'shortcode': comment['shortcode'],
                 'text': comment['text'],
             })

@@ -8,7 +8,9 @@ RUN apt-get update && apt-get install -y software-properties-common &&\
 	python3\
 	python3-pip\
 	&& rm -rf /var/lib/apt/lists/*
-RUN pip3 install pytesseract
+RUN pip3 install pytesseract pysentimiento
+RUN python3 -c "import pysentimiento;pysentimiento.SentimentAnalyzer('es')"
+RUN pip3 install tqdm
 
 COPY ./main.py /src/main.py
 

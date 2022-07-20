@@ -10,6 +10,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import LinearProgress from '@mui/material/LinearProgress';
 
 function Resultados() {
   const {
@@ -57,26 +58,32 @@ function Resultados() {
         </AccordionSummary>
         <AccordionDetails>
           <List>
-            {item.catedrasvirtuales_.map(({ text, shortcode }) => ({
+            {item.catedrasvirtuales_.map(({ text, shortcode, sentiment }) => ({
                   text,
                   link: `https://www.instagram.com/p/${shortcode}/`,
+                  sentiment: (sentiment.POS - sentiment.NEG + 1) / 2 as number | null,
                 }))
                 .concat(item.franja.map((text) => ({
                   text,
                   link: `https://www.instagram.com/franjaderecho/`,
+                  sentiment: null,
                 })))
                 .concat(item.centeno.map((text) => ({
                   text,
                   link: `https://www.instagram.com/centenoderecho/`,
+                  sentiment: null,
                 })))
-              .map(({ text, link }, i: number) => {
+              .map(({ text, link, sentiment }, i: number) => {
               return (
                 <ListItem
                   key={`${text},${i}`}
                   disablePadding
                 >
                   <ListItemButton component="a" href={link}>
-                    <ListItemText primary={text} />
+                    <div>
+                      {sentiment !== null && <LinearProgress variant="determinate" value={100 * sentiment} />}
+                      <ListItemText primary={text} />
+                    </div>
                   </ListItemButton>
                 </ListItem>
               );

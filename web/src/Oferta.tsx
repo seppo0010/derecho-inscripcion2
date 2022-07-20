@@ -7,7 +7,15 @@ export interface OfertaItem {
   comision: string,
   docente: string,
   modalidad: string,
-  catedrasvirtuales_: {text: string, shortcode: string}[],
+  catedrasvirtuales_: {
+    text: string,
+    shortcode: string,
+    sentiment: {
+      POS: number,
+      NEU: number,
+      NEG: number,
+    },
+  }[],
   centeno: string[],
   franja: string[],
 }
