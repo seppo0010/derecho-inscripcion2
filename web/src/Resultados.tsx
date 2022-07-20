@@ -15,13 +15,19 @@ function Resultados() {
   const {
     loading,
     oferta,
+    departamentos,
     materiasSelected,
     horariosSelected,
   } = useContext(OfertaContext);
   const [ofertaFiltered, setOfertaFiltered] = useState<OfertaItem[] | null>(null);
   useEffect(() => {
-    setOfertaFiltered((oferta || []).filter((o) => (materiasSelected || []).includes(o.materia) && (horariosSelected || []).includes(o.horario)))
-  }, [materiasSelected, horariosSelected, oferta]);
+    if (!departamentos) return;
+    setOfertaFiltered(
+      (oferta || []).filter((o) => (
+          (materiasSelected || []).includes(o.materia) ||
+          (materiasSelected || []).includes(departamentos[o.departamento])
+        ) && (horariosSelected || []).includes(o.horario)))
+  }, [materiasSelected, horariosSelected, oferta, departamentos]);
 
   if (loading || !ofertaFiltered) return (<>Loading...</>)
   return (<>
