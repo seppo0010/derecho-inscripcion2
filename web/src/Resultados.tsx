@@ -8,6 +8,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 
 function Resultados() {
@@ -50,16 +51,27 @@ function Resultados() {
         </AccordionSummary>
         <AccordionDetails>
           <List>
-            {item.catedrasvirtuales_
-                .concat(item.franja)
-                .concat(item.centeno)
-              .map((value: string, i: number) => {
+            {item.catedrasvirtuales_.map(({ text, shortcode }) => ({
+                  text,
+                  link: `https://www.instagram.com/p/${shortcode}/`,
+                }))
+                .concat(item.franja.map((text) => ({
+                  text,
+                  link: `https://www.instagram.com/franjaderecho/`,
+                })))
+                .concat(item.centeno.map((text) => ({
+                  text,
+                  link: `https://www.instagram.com/centenoderecho/`,
+                })))
+              .map(({ text, link }, i: number) => {
               return (
                 <ListItem
-                  key={`${value},${i}`}
+                  key={`${text},${i}`}
                   disablePadding
                 >
-                  <ListItemText primary={value} />
+                  <ListItemButton component="a" href={link}>
+                    <ListItemText primary={text} />
+                  </ListItemButton>
                 </ListItem>
               );
             })}

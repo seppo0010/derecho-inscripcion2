@@ -43,7 +43,10 @@ for o in oferta:
                 is_same_materia(comment['materia_turno'], o['materia']) or
                 is_same_departamento(comment['materia_turno'], o.get('departamento', None))
             ) and is_docente_named(docente, comment['tokens']):
-            o['catedrasvirtuales_'].append(comment['text'])
+            o['catedrasvirtuales_'].append({
+                'shortcode': comment['shortcode'],
+                'text': comment['text'],
+            })
 
 oferta_by_comision = {}
 for o in oferta:
