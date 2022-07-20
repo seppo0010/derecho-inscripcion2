@@ -15,6 +15,7 @@ export interface OfertaItem {
 export const OfertaContext = React.createContext<{
   loading: boolean,
   oferta: OfertaItem[] | null,
+  departamentos: Record<string, string> | null,
   materiasSelected: string[] | null,
   setMateriasSelected: (m: string[] | null) => void,
   horariosSelected: string[] | null,
@@ -22,6 +23,7 @@ export const OfertaContext = React.createContext<{
 }>({
   loading: false,
   oferta: null,
+  departamentos: null,
   materiasSelected: null,
   setMateriasSelected: (m) => { },
   horariosSelected: null,
@@ -31,6 +33,7 @@ export const OfertaContext = React.createContext<{
 export default function Oferta({ children }: { children: any }) {
   const [loading, setLoading] = useState(false);
   const [oferta, setOferta] = useState(null);
+  const [departamentos, setDepartamentos] = useState(null);
   const [materiasSelected, setMateriasSelected] = useState<string[] | null>(null);
   const [horariosSelected, setHorariosSelected] = useState<string[] | null>(null);
   useEffect(() => {
@@ -38,15 +41,17 @@ export default function Oferta({ children }: { children: any }) {
     setLoading(true);
     fetch(`${process.env.PUBLIC_URL}/oferta.json`)
       .then((r) => r.json())
-      .then((r) => {
+      .then(({ oferta, departamentos }) => {
         setLoading(false);
-        setOferta(r);
+        setOferta(oferta);
+        setDepartamentos(departamentos);
       })
   }, [loading, oferta]);
   return (
     <OfertaContext.Provider value={{
         loading,
         oferta,
+        departamentos,
         materiasSelected, setMateriasSelected,
         horariosSelected, setHorariosSelected,
       }}>

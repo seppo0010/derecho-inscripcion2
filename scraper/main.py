@@ -72,4 +72,7 @@ for row in read_json('franja/data/recommendations.json'):
     oferta_by_comision[id_]['franja'].append(row['opinion'])
 
 with open('data/data.json', 'w') as fp:
-    fp.write(json.dumps(list(oferta_by_comision.values())))
+    fp.write(json.dumps({
+        "oferta": list(oferta_by_comision.values()),
+        "departamentos": read_json('departamentos.json'),
+    }))

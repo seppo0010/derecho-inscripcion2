@@ -16,11 +16,12 @@ function onlyUnique<T>(value: T, index: number, self: T[]) {
 
 function Materias() {
   const navigate = useNavigate();
-  const { loading, oferta, materiasSelected, setMateriasSelected } = useContext(OfertaContext);
+  const { loading, oferta, departamentos, materiasSelected, setMateriasSelected } = useContext(OfertaContext);
   const [materias, setMaterias] = useState<null | string[]>(null);
   useEffect(() => {
-    setMaterias((oferta || []).map((o) => o.departamento ? `Puntos ${o.departamento}` : o.materia).filter(onlyUnique));
-  }, [oferta]);
+    if (!departamentos) return;
+    setMaterias((oferta || []).map((o) => o.departamento ? departamentos[o.departamento] : o.materia).filter(onlyUnique));
+  }, [oferta, departamentos]);
   const [checked, setChecked] = React.useState<null | string[]>(null);
 
   useEffect(() => {
