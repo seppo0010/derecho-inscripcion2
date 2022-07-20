@@ -25,11 +25,22 @@ function sortHorario(h1: string, h2: string) {
 
 function Materias() {
   const navigate = useNavigate();
-  const { loading, oferta, setHorariosSelected, horariosSelected } = useContext(OfertaContext);
+  const {
+    loading,
+    oferta,
+    departamentos,
+    materiasSelected,
+    setHorariosSelected, horariosSelected,
+  } = useContext(OfertaContext);
   const [horarios, setHorarios] = useState<string[]>([]);
   useEffect(() => {
-    setHorarios((oferta || []).map((o) => o.horario).filter(onlyUnique).sort(sortHorario));
-  }, [oferta]);
+    if (!departamentos) return;
+    setHorarios((oferta || [])
+      .filter((o) => (materiasSelected || []).includes(o.materia) || (materiasSelected || []).includes(departamentos[o.departamento]))
+      .map((o) => o.horario)
+      .filter(onlyUnique)
+      .sort(sortHorario));
+  }, [oferta, materiasSelected, departamentos]);
   const [checked, setChecked] = React.useState<string[] | null>(null);
 
   useEffect(() => {
