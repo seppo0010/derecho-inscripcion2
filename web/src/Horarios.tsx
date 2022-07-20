@@ -80,7 +80,8 @@ function Materias() {
       </Link>
       <span>Horarios</span>
     </Breadcrumbs>
-    <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+    {horarios.length === 0 && <div>No hay horarios para las materias seleccionadas.</div>}
+    {horarios.length > 0 && <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
       {horarios.map((value: string) => {
         const labelId = `checkbox-list-label-${value}`;
 
@@ -104,7 +105,7 @@ function Materias() {
           </ListItem>
         );
       })}
-    </List>
+    </List>}
     <Button onClick={() => { save(); navigate('/materias')} }>Anterior</Button>
     <Button onClick={() => { save(); navigate('/resultados')} }>Siguiente</Button>
   </>);
