@@ -47,6 +47,13 @@ function Resultados() {
   }, [materiasSelected, horariosSelected, oferta, departamentos]);
 
   if (loading || !ofertaFiltered) return (<>Loading...</>)
+  const itemReviewSummary = (item: OfertaItem) => {
+    const allReviews = [...item.catedrasvirtuales_, ...item.franja, ...item.centeno]
+    const relevantReviews = allReviews.filter(({ sentiment }) => sentiment.POS > 0.5 || sentiment.NEG > 0.5)
+    const positiveReviews = relevantReviews.reduce((acc, { sentiment }, i, arr) => acc + (sentiment.POS > 0.5 ? 1 : 0), 0)
+    if (relevantReviews.length === 0) { return ''; }
+    return `${positiveReviews}/${relevantReviews.length} recomendaciones positivas`;
+  }
   return (<>
     {ofertaFiltered.length === 0 && 'Sin resultados'}
     {ofertaFiltered.map((item) => (
@@ -59,6 +66,7 @@ function Resultados() {
           {item.docente}<br />
           {item.modalidad}<br />
           {item.comision}<br />
+          {itemReviewSummary(item)}
         </AccordionSummary>
         <AccordionDetails>
           <List>
