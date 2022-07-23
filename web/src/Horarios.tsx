@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { OfertaContext } from './Oferta';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
@@ -8,7 +8,6 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
 
 function onlyUnique<T>(value: T, index: number, self: T[]) {
   return self.indexOf(value) === index;
@@ -63,23 +62,12 @@ function Materias() {
     setChecked(newChecked);
   };
 
-  const save = () => {
-    setHorariosSelected(checked);
-  };
+  useEffect(() => () => setHorariosSelected(checked), [checked, setHorariosSelected])
 
   if (loading || !horarios || checked === null) {
     return (<>Loading...</>)
   }
   return (<>
-    <Breadcrumbs>
-      <Link to="/">
-        Inscripción
-      </Link>
-      <Link to="/materias">
-        Materias
-      </Link>
-      <span>Horarios</span>
-    </Breadcrumbs>
     {horarios.length === 0 && <div>No hay horarios para las materias seleccionadas.</div>}
     {horarios.length > 0 && <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
       {horarios.map((value: string) => {
@@ -106,8 +94,8 @@ function Materias() {
         );
       })}
     </List>}
-    <Button onClick={() => { save(); navigate('/materias')} }>Anterior</Button>
-    <Button onClick={() => { save(); navigate('/resultados')} }>Siguiente</Button>
+    <Button onClick={() => navigate('/materias') }>Anterior</Button>
+    <Button onClick={() => navigate('/resultados') }>Siguiente</Button>
   </>);
 }
 

@@ -1,11 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Link } from "react-router-dom";
 import { OfertaContext, OfertaItem } from './Oferta';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -32,18 +30,6 @@ function Resultados() {
 
   if (loading || !ofertaFiltered) return (<>Loading...</>)
   return (<>
-    <Breadcrumbs>
-      <Link to="/">
-        Inscripción
-      </Link>
-      <Link to="/materias">
-        Materias
-      </Link>
-      <Link to="/horarios">
-        Horarios
-      </Link>
-      <span>Resultados</span>
-    </Breadcrumbs>
     {ofertaFiltered.length === 0 && 'Sin resultados'}
     {ofertaFiltered.map((item) => (
       <Accordion key={item.comision}>

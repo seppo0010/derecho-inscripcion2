@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { OfertaContext } from './Oferta';
 import Button from '@mui/material/Button';
 import List from '@mui/material/List';
@@ -8,7 +8,6 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
 
 function onlyUnique<T>(value: T, index: number, self: T[]) {
   return self.indexOf(value) === index;
@@ -43,20 +42,12 @@ function Materias() {
     setChecked(newChecked);
   };
 
-  const save = () => {
-    setMateriasSelected(checked);
-  };
+  useEffect(() => () => setMateriasSelected(checked), [checked, setMateriasSelected])
 
   if (loading || !materias || checked === null) {
     return (<>Loading...</>)
   }
   return (<>
-    <Breadcrumbs>
-      <Link to="/">
-        Inscripción
-      </Link>
-      <span>Materias</span>
-    </Breadcrumbs>
     <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
       {materias.map((value: string) => {
         const labelId = `checkbox-list-label-${value}`;
@@ -82,8 +73,8 @@ function Materias() {
         );
       })}
     </List>
-    <Button onClick={() => { save(); navigate('/') } }>Anterior</Button>
-    <Button onClick={() => { save(); navigate('/horarios') } }>Siguiente</Button>
+    <Button onClick={() => navigate('/') }>Anterior</Button>
+    <Button onClick={() => navigate('/horarios') }>Siguiente</Button>
   </>);
 }
 

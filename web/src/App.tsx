@@ -11,12 +11,14 @@ import Welcome from './Welcome';
 import Materias from './Materias';
 import Horarios from './Horarios';
 import Resultados from './Resultados';
+import Navigation from './Navigation';
 
 function App() {
   return (
     <Container maxWidth="sm">
       <Oferta>
         <HashRouter>
+          <Navigation />
           <Routes>
             <Route path="/" element={<Welcome />} />
             <Route path="/materias" element={<Materias />} />
