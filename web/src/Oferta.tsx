@@ -16,8 +16,22 @@ export interface OfertaItem {
       NEG: number,
     },
   }[],
-  centeno: string[],
-  franja: string[],
+  centeno: {
+    text: string,
+    sentiment: {
+      POS: number,
+      NEU: number,
+      NEG: number,
+    },
+  }[],
+  franja: {
+    text: string,
+    sentiment: {
+      POS: number,
+      NEU: number,
+      NEG: number,
+    },
+  }[],
 }
 
 export const OfertaContext = React.createContext<{

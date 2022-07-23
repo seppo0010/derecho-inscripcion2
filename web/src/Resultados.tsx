@@ -47,17 +47,17 @@ function Resultados() {
             {item.catedrasvirtuales_.map(({ text, shortcode, sentiment }) => ({
                   text,
                   link: `https://www.instagram.com/p/${shortcode}/`,
-                  sentiment: (sentiment.POS - sentiment.NEG + 1) / 2 as number | null,
+                  sentiment: (sentiment.POS - sentiment.NEG + 1) / 2 as number,
                 }))
-                .concat(item.franja.map((text) => ({
+                .concat(item.franja.map(({ text, sentiment }) => ({
                   text,
                   link: `https://www.instagram.com/franjaderecho/`,
-                  sentiment: null,
+                  sentiment: (sentiment.POS - sentiment.NEG + 1) / 2 as number,
                 })))
-                .concat(item.centeno.map((text) => ({
+                .concat(item.centeno.map(({ text, sentiment }) => ({
                   text,
                   link: `https://www.instagram.com/centenoderecho/`,
-                  sentiment: null,
+                  sentiment: (sentiment.POS - sentiment.NEG + 1) / 2 as number,
                 })))
               .map(({ text, link, sentiment }, i: number) => {
               return (
@@ -67,7 +67,7 @@ function Resultados() {
                 >
                   <ListItemButton component="a" href={link}>
                     <div>
-                      {sentiment !== null && <LinearProgress variant="determinate" value={100 * sentiment} />}
+                      <LinearProgress variant="determinate" value={100 * sentiment} />
                       <ListItemText primary={text} />
                     </div>
                   </ListItemButton>
