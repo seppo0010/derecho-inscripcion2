@@ -8,7 +8,25 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import LinearProgress from '@mui/material/LinearProgress';
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
+import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
+
+function Comment({ text, link, sentiment }: { text: string, link: string, sentiment: { POS: number, NEG: number }}) {
+  const icon = sentiment.POS > 0.5  ? <ThumbUpAltIcon /> : (
+    sentiment.NEG > 0.5 ? <ThumbDownAltIcon /> : <QuestionMarkIcon />
+  );
+  return (
+    <ListItem
+      disablePadding
+      secondaryAction={icon}
+    >
+      <ListItemButton component="a" href={link}>
+        <ListItemText primary={text} />
+      </ListItemButton>
+    </ListItem>
+  );
+}
 
 function Resultados() {
   const {
@@ -44,36 +62,16 @@ function Resultados() {
         </AccordionSummary>
         <AccordionDetails>
           <List>
-            {item.catedrasvirtuales_.map(({ text, shortcode, sentiment }) => ({
-                  text,
-                  link: `https://www.instagram.com/p/${shortcode}/`,
-                  sentiment: (sentiment.POS - sentiment.NEG + 1) / 2 as number,
-                }))
-                .concat(item.franja.map(({ text, sentiment }) => ({
-                  text,
-                  link: `https://www.instagram.com/franjaderecho/`,
-                  sentiment: (sentiment.POS - sentiment.NEG + 1) / 2 as number,
-                })))
-                .concat(item.centeno.map(({ text, sentiment }) => ({
-                  text,
-                  link: `https://www.instagram.com/centenoderecho/`,
-                  sentiment: (sentiment.POS - sentiment.NEG + 1) / 2 as number,
-                })))
-              .map(({ text, link, sentiment }, i: number) => {
-              return (
-                <ListItem
-                  key={`${text},${i}`}
-                  disablePadding
-                >
-                  <ListItemButton component="a" href={link}>
-                    <div>
-                      <LinearProgress variant="determinate" value={100 * sentiment} />
-                      <ListItemText primary={text} />
-                    </div>
-                  </ListItemButton>
-                </ListItem>
-              );
-            })}
+            {item.catedrasvirtuales_.map(({ text, shortcode, sentiment }, i) => (
+                  <Comment key={`cv${i}`} text={text} link={`https://www.instagram.com/p/${shortcode}/`} sentiment={sentiment} />
+                ))
+                .concat(item.franja.map(({ text, sentiment }, i) => (
+                  <Comment key={`franja${i}`} text={text} link={`https://www.instagram.com/p/franjaderecho/`} sentiment={sentiment} />
+                )))
+                .concat(item.centeno.map(({ text, sentiment }, i) => (
+                  <Comment key={`centeno${i}`} text={text} link={`https://www.instagram.com/p/centenoderecho/`} sentiment={sentiment} />
+                )))
+            }
           </List>
         </AccordionDetails>
       </Accordion>
