@@ -38,6 +38,7 @@ for o in oferta:
     o['catedrasvirtuales_'] = []
     o['centeno'] = []
     o['franja'] = []
+    o['tucatedraderecho'] = []
 
 oferta_by_comision = {}
 for o in oferta:
@@ -85,9 +86,26 @@ def process_franja():
             'sentiment': analyzer.predict(row['opinion']).probas,
         })
 
+def process_tcd():
+    for comment in tqdm(read_json('tucatedraderecho/data/data.json')):
+        lines = comment['text'].split('\n', 2)
+        if len(lines) == 3 and lines[1].startswith('Comision '):
+            comision_str = lines[1][9:13]
+            if not comision_str.isdigit():
+                continue
+            comision = int(comision_str)
+            if comision not in oferta_by_comision:
+                print(comment['text'])
+                continue
+            oferta_by_comision[comision]['tucatedraderecho'].append({
+                'text': lines[2],
+                'sentiment': analyzer.predict(lines[2]).probas,
+            })
+
 process_cv()
 process_centeno()
 process_franja()
+process_tcd()
 
 with open('data/data.json', 'w') as fp:
     fp.write(json.dumps({

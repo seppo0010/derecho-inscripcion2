@@ -48,7 +48,7 @@ function Resultados() {
 
   if (loading || !ofertaFiltered) return (<>Loading...</>)
   const itemReviewSummary = (item: OfertaItem) => {
-    const allReviews = [...item.catedrasvirtuales_, ...item.franja, ...item.centeno]
+    const allReviews = [...item.catedrasvirtuales_, ...item.franja, ...item.centeno, ...item.tucatedraderecho]
     const relevantReviews = allReviews.filter(({ sentiment }) => sentiment.POS > 0.5 || sentiment.NEG > 0.5)
     const positiveReviews = relevantReviews.reduce((acc, { sentiment }, i, arr) => acc + (sentiment.POS > 0.5 ? 1 : 0), 0)
     if (relevantReviews.length === 0) { return ''; }
@@ -78,6 +78,9 @@ function Resultados() {
                 )))
                 .concat(item.centeno.map(({ text, sentiment }, i) => (
                   <Comment key={`centeno${i}`} text={text} link={`https://www.instagram.com/p/centenoderecho/`} sentiment={sentiment} />
+                )))
+                .concat(item.tucatedraderecho.map(({ text, sentiment }, i) => (
+                  <Comment key={`tucatedraderecho{i}`} text={text} link={`https://tucatedraderecho.com.ar/`} sentiment={sentiment} />
                 )))
             }
           </List>

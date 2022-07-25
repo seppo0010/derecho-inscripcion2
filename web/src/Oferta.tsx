@@ -32,6 +32,14 @@ export interface OfertaItem {
       NEG: number,
     },
   }[],
+  tucatedraderecho: {
+    text: string,
+    sentiment: {
+      POS: number,
+      NEU: number,
+      NEG: number,
+    },
+  }[],
 }
 
 export const OfertaContext = React.createContext<{
