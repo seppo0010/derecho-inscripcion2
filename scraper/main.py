@@ -93,27 +93,35 @@ def process_franja():
 def process_tcd():
     for comment in tqdm(read_json('tucatedraderecho/data/data.json')):
         lines = comment['text'].split('\n', 2)
-        if len(lines) == 3 and lines[1].startswith('Comision '):
+        if lines[0] == '-':
+            continue
+        if len(lines) == 3:
             comision_str = lines[1][9:13]
-            if comision_str.isdigit():
+            if lines[1].startswith('Comision ') and comision_str.isdigit():
                 comision = int(comision_str)
-                if comision not in oferta_by_comision:
+                if comision in oferta_by_comision:
+                    oferta_by_comision[comision]['tucatedraderecho'].append({
+                        'text': lines[2],
+                        'sentiment': None if analyzer is None else analyzer.predict(lines[2]).probas,
+                    })
                     continue
-                oferta_by_comision[comision]['tucatedraderecho'].append({
-                    'text': lines[2],
-                    'sentiment': None if analyzer is None else analyzer.predict(lines[2]).probas,
-                })
-            else:
-                if lines[0] == '-':
-                    continue
-                if lines[0] in oferta_by_docente:
-                    sentiment = None if analyzer is None else analyzer.predict(lines[2]).probas
-                    if lines[0] in oferta_by_docente:
-                        for o in oferta_by_docente[lines[0]]:
-                            oferta_by_comision[comision]['tucatedraderecho'].append({
-                                'text': lines[2],
-                                'sentiment': sentiment,
-                            })
+            if lines[0] in oferta_by_docente:
+                sentiment = None if analyzer is None else analyzer.predict(lines[2]).probas
+                for o in oferta_by_docente[lines[0]]:
+                    o['tucatedraderecho'].append({
+                        'text': lines[2],
+                        'sentiment': sentiment,
+                    })
+                continue
+            if lines[1] in oferta_by_docente:
+                sentiment = None if analyzer is None else analyzer.predict(lines[2]).probas
+                for o in oferta_by_docente[lines[1]]:
+                    o['tucatedraderecho'].append({
+                        'text': lines[2],
+                        'sentiment': sentiment,
+                    })
+                continue
+
 process_cv()
 process_centeno()
 process_franja()
