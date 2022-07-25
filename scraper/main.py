@@ -41,9 +41,13 @@ for o in oferta:
     o['tucatedraderecho'] = []
 
 oferta_by_comision = {}
+oferta_by_docente = {}
 for o in oferta:
     if isinstance(o, dict) and o['comision'] not in ('Comisión', 'comisión'):
         oferta_by_comision[int(o['comision'])] = o
+    if o['docente'] not in oferta_by_docente:
+        oferta_by_docente[o['docente']] = []
+    oferta_by_docente[o['docente']].append(o)
 
 
 def process_cv():
@@ -61,7 +65,7 @@ def process_cv():
                 o['catedrasvirtuales_'].append({
                     'shortcode': comment['shortcode'],
                     'text': comment['text'],
-                    'sentiment': analyzer.predict(comment['text']).probas,
+                    'sentiment': None if analyzer is None else analyzer.predict(comment['text']).probas,
                 })
 
 def process_centeno():
@@ -73,7 +77,7 @@ def process_centeno():
                     continue
                 oferta_by_comision[id_]['centeno'].append({
                     'text': op['OPINIÓN'],
-                    'sentiment': analyzer.predict(op['OPINIÓN']).probas,
+                    'sentiment': None if analyzer is None else analyzer.predict(op['OPINIÓN']).probas,
                 })
 
 def process_franja():
@@ -83,7 +87,7 @@ def process_franja():
             continue
         oferta_by_comision[id_]['franja'].append({
             'text': row['opinion'],
-            'sentiment': analyzer.predict(row['opinion']).probas,
+            'sentiment': None if analyzer is None else analyzer.predict(row['opinion']).probas,
         })
 
 def process_tcd():
@@ -91,17 +95,25 @@ def process_tcd():
         lines = comment['text'].split('\n', 2)
         if len(lines) == 3 and lines[1].startswith('Comision '):
             comision_str = lines[1][9:13]
-            if not comision_str.isdigit():
-                continue
-            comision = int(comision_str)
-            if comision not in oferta_by_comision:
-                print(comment['text'])
-                continue
-            oferta_by_comision[comision]['tucatedraderecho'].append({
-                'text': lines[2],
-                'sentiment': analyzer.predict(lines[2]).probas,
-            })
-
+            if comision_str.isdigit():
+                comision = int(comision_str)
+                if comision not in oferta_by_comision:
+                    continue
+                oferta_by_comision[comision]['tucatedraderecho'].append({
+                    'text': lines[2],
+                    'sentiment': None if analyzer is None else analyzer.predict(lines[2]).probas,
+                })
+            else:
+                if lines[0] == '-':
+                    continue
+                if lines[0] in oferta_by_docente:
+                    sentiment = None if analyzer is None else analyzer.predict(lines[2]).probas
+                    if lines[0] in oferta_by_docente:
+                        for o in oferta_by_docente[lines[0]]:
+                            oferta_by_comision[comision]['tucatedraderecho'].append({
+                                'text': lines[2],
+                                'sentiment': sentiment,
+                            })
 process_cv()
 process_centeno()
 process_franja()
