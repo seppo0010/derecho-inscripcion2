@@ -12,4 +12,5 @@ write_posts_to_csv(
     matching=r'.+',
     pages=int(os.environ.get('SCRAPER_PAGES', 10)),
     encoding='utf-8',
+    options={"comments": True},
 )
