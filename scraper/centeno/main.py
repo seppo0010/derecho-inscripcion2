@@ -5,6 +5,8 @@ for f in ('cpc', 'cpo'):
     xls = pd.ExcelFile(f'/data/recomendaciones_{f}.xlsx')
     pages = []
     for page_name in xls.sheet_names:
+        if page_name in ('ÚLTIMOS CORTES CPO',):
+            continue
         page = pd.read_excel(xls, page_name)
         page.columns = page.iloc[1]
         page = page.rename(columns={'COMISION': 'COMISIÓN', 'OPINION': 'OPINIÓN'})
