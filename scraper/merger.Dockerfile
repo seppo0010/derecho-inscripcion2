@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y\
 	&& rm -rf /var/lib/apt/lists/*
 
 RUN pip3 install pysentimiento tqdm
-RUN python3 -c "import pysentimiento;pysentimiento.SentimentAnalyzer('es')"
+RUN python3 -c "import pysentimiento;pysentimiento.create_analyzer(task='sentiment', lang='es')"
 
 COPY ./main.py /src/main.py
 

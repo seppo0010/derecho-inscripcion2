@@ -9,7 +9,7 @@ def read_json(path):
         return json.loads(filepointer.read())
 
 known_materias = read_json('catedrasvirtuales_/aliases.json')
-analyzer = pysentimiento.SentimentAnalyzer('es')
+analyzer = pysentimiento.create_analyzer(task='sentiment', lang='es')
 
 def is_same_materia(materia_turno, materia):
     if materia_turno not in known_materias:
@@ -72,7 +72,8 @@ def process_centeno():
     for f in 'cpc', 'cpo':
         for op in tqdm(read_json(f'centeno/data/recomendaciones_{f}.json')):
             for comision in str(op['COMISIÓN']).split('/'):
-                id_ = int(comision.strip())
+                if comision == 'NO': continue
+                id_ = int(comision.strip().replace('.0', ''))
                 if id_ not in oferta_by_comision:
                     continue
                 oferta_by_comision[id_]['centeno'].append({
